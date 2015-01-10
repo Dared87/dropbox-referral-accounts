@@ -1,0 +1,5 @@
+[config]
+emailFormat = "myfakedropboxaccount.%s@yopmail.com"
+dropboxPartnerLink = "https://db.tt/xxxxxxxx"
+partnerAccountIdStart = 1
+partnerAccountIdStop = 10
