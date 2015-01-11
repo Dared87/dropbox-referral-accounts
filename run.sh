@@ -7,7 +7,7 @@ function create_box() {
     vagrant destroy -f
 
     echo "Generate MAC address..."
-    MAC_ADDRESS=$(ruby ${LIBRARIES_FOLDER}/genmac.rb -u | sed 's/://g')
+    MAC_ADDRESS=$(od /dev/urandom -w6 -tx1 -An | sed -e 's/ //g' | head -n 1 | awk '{print toupper($0)}')
 
     echo "Create box for account ${ACCOUNT_ID} with MAC address ${MAC_ADDRESS}..."
     ACCOUNT_ID=${ACCOUNT_ID} MAC_ADDRESS=${MAC_ADDRESS} vagrant up --provision
