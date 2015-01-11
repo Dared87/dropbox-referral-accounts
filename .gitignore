@@ -2,4 +2,3 @@
 /screenshots/
 !/screenshots/.gitkeep
 /config/config.ini
-output.log

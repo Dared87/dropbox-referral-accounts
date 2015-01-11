@@ -1,40 +1,41 @@
 "use strict";
 
 var casper = require('casper').create({
+        pageSettings: {
+            loadImages: false,
+            loadPlugins: false
+        },
+
+        // Debug
         verbose: true,
-        logLevel: 'debug',
-        waitTimeout: 20000
+        logLevel: 'error'
     }),
     account,
     action,
     actions,
-    accountId,
-    emailFormat,
     dropboxUrl;
 
-if ( ! casper.cli.has(3)) {
-    console.log('Usage: manage-account.js <action> <account_id> <emailFormat> <dropboxUrl>');
+casper.options.waitTimeout = casper.cli.get('timeout');
+
+if ( ! casper.cli.has(6) || casper.cli.has(7)) {
+    console.log('Usage: manage-account.js <action> <dropboxUrl> <account_id> <accountFirstName> <accountLastName> <accountEmail> <accountPassword>');
     casper.exit(1);
 }
 
 action = casper.cli.get(0);
-accountId = casper.cli.get(1);
-emailFormat = casper.cli.get(2);
-dropboxUrl = casper.cli.get(3);
+dropboxUrl = casper.cli.get(1);
 
 if (action !== 'link' && action !== 'create') {
     console.log('The action must be either "link" or "create".');
     casper.exit(1);
 }
-if (emailFormat.indexOf('%s') < 1) {
-    console.log('The email format MUST contain "%s" so it can be replaced by the account ID.');
-}
 
+// Converting to string is essential for "numbers-only" passwords, otherwise Dropbox password field filling bugs.
 account = {
-    firstName: 'John',
-    lastName: 'Doe',
-    password: '123123',
-    email: emailFormat.replace(/%s/, accountId)
+    firstName: String(casper.cli.get(3)),
+    lastName: String(casper.cli.get(4)),
+    password: String(casper.cli.get(6)),
+    email: String(casper.cli.get(5).replace(/%s/, casper.cli.get(2)))
 };
 
 casper.options.onWaitTimeout = function () {
@@ -139,7 +140,9 @@ casper.run();
 
 function safeExit(casper, code)
 {
-    casper.capture('screenshots/exit_'+ code +'_'+ Math.random() +'.png');
+    if (code > 0) {
+        casper.capture('screenshots/error_exit_code_' + code + '_timestamp_' + new Date().getTime() + '.png');
+    }
 
     setTimeout(function () {
         casper.exit(code);

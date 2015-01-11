@@ -1,5 +1,10 @@
 [config]
-emailFormat = "myfakedropboxaccount.%s@yopmail.com"
+action = "both"
+anonymity = "false"
 dropboxPartnerLink = "https://db.tt/xxxxxxxx"
-partnerAccountIdStart = 1
-partnerAccountIdStop = 10
+accountIdStart = 1
+accountIdStop = 10
+accountFirstName = "John"
+accountLastName = "Doe"
+accountEmail = "myfakedropboxaccount.%s@yopmail.com"
+accountPassword = "123123"
