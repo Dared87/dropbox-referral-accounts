@@ -21,11 +21,16 @@ echo "Read configuration file"
 source ${LIBRARIES_FOLDER}/ini-parser.sh
 read_ini "config/config.ini" "config"
 
-START=$INI__config__accountIdStart
-STOP=$INI__config__accountIdStop
+if [ -z "$1" ] ; then
+    RANGE=1
+elif [ ! -z "$2" ] ; then
+    RANGE=$(seq $1 $2)
+else
+    RANGE=$1
+fi
 
-echo "Loop over defined partner accounts ID range"
-for ACCOUNT_ID in $(seq ${START} ${STOP})
+echo "Loop over range"
+for ACCOUNT_ID in ${RANGE}
 do
     until create_box ${LIBRARIES_FOLDER} ${ACCOUNT_ID}
     do
@@ -33,5 +38,5 @@ do
     done
 done
 
-echo "Destroy the last running box..."
-vagrant destroy -f
+#echo "Destroy the last running box..."
+#vagrant destroy -f

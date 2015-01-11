@@ -1,9 +1,8 @@
 [config]
+logging = "none"
 action = "both"
-anonymity = "false"
-dropboxPartnerLink = "https://db.tt/xxxxxxxx"
-accountIdStart = 1
-accountIdStop = 10
+anonymity = "true"
+dropboxReferralURL = "https://db.tt/xxxxxxxx"
 accountFirstName = "John"
 accountLastName = "Doe"
 accountEmail = "myfakedropboxaccount.%s@yopmail.com"

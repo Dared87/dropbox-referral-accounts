@@ -15,3 +15,6 @@ if [ -f ${HOME}/dropbox.log ] ; then
     echo "Clean-up existing Dropbox daemon logs"
     rm -f ${HOME}/dropbox.log
 fi
+
+echo "Start a new Dropbox daemon"
+${HOME}/.dropbox-dist/dropboxd > ${HOME}/dropbox.log 2>&1 &
