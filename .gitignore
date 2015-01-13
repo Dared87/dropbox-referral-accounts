@@ -1,4 +1,4 @@
 /.vagrant/
 /screenshots/
 !/screenshots/.gitkeep
-/config/config.ini
+/config/config.cfg

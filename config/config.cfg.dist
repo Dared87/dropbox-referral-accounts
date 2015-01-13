@@ -1,0 +1,9 @@
+dropbox_referral_url="https://db.tt/xxxxxxxx"
+account_email="change_me_for_something_unique.%d@yopmail.com"
+
+# Do not touch the configuration below except if you know what you're doing
+account_firstname="John"
+account_lastname="Doe"
+account_password="123123"
+action="both"
+logging="none"

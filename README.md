@@ -20,8 +20,8 @@ Install up-to-date versions of [Vagrant](https://www.vagrantup.com/downloads.htm
 1. Create a new folder on your computer : `mkdir -p ~/dropbox-referral-accounts && cd $_`.
 2. Download the scripts inside it :
   `wget -O - https://bitbucket.org/gnutix/dropbox-referral-accounts/get/master.tar.gz | tar xzf - --strip 1`
-3. Create your own configuration file : `cp config/config.ini.dist config/config.ini`
-4. Adapt the following values of `config/config.ini` to your needs :
+3. Create your own configuration file : `cp config/config.cfg.dist config/config.cfg`
+4. Adapt the following values of `config/config.cfg` to your needs :
 
 ```
 # The referral link of the Dropbox account for which you want to increase the storage.
@@ -58,6 +58,9 @@ to
 ```
     config.vm.network :private_network, ip: "10.10.10.10"`
 ```
+(you are free to use any IP address in the
+[private IP address space](http://en.wikipedia.org/wiki/Private_network#Private_IPv4_address_spaces) instead of
+`10.10.10.10`).
 
 ### Accounts not correctly created or linked
 
