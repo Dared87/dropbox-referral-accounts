@@ -1,6 +1,6 @@
 #!/bin/bash
 ACCOUNT_ID=$1
-RUN_OPTIONS="--ssl-protocol=tlsv1 --ignore-ssl-errors=true --web-security=no"
+RUN_OPTIONS="--ssl-protocol=any --ignore-ssl-errors=true --web-security=false"
 
 echo "Read configuration file"
 source /vagrant/libs/ini-parser.sh
@@ -12,29 +12,18 @@ ACCOUNT_LASTNAME=${INI__config__accountLastName}
 ACCOUNT_EMAIL=${INI__config__accountEmail}
 ACCOUNT_PASSWORD=${INI__config__accountPassword}
 DROPBOX_REFERRAL_URL=${INI__config__dropboxReferralURL}
-ANONYMITY=${INI__config__anonymity}
 
 if [ "none" != "${RUN_LOGGING}" ] ; then
     RUN_OPTIONS="${RUN_OPTIONS} --verbose --log-level=${RUN_LOGGING}"
 fi
 
-echo "Setup Vagrant box for account ${ACCOUNT_ID} (using anonymity: ${ANONYMITY}) !"
-
-if [ "${ANONYMITY}" = true ] ; then
-    bash /vagrant/provisioning/anonymity.sh
-    RUN_OPTIONS="${RUN_OPTIONS} --proxy=127.0.0.1:9050 --proxy-type=socks5"
-fi
+echo "Setup Vagrant box for account ${ACCOUNT_ID} !"
 
 bash /vagrant/provisioning/browser-manipulation.sh
 
 # Fix screenshots path for CasperJS
 cd /vagrant
 RUN="casperjs ${RUN_OPTIONS} /vagrant/scripts"
-
-if [ "${ANONYMITY}" = true ] ; then
-    echo "Get my IP address"
-    ${RUN}/what-is-my-ip.js
-fi
 
 # Create the account
 if [ "${ACTION}" == "create" ] || [ "${ACTION}" == "both" ] ; then

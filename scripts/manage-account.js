@@ -1,11 +1,11 @@
 "use strict";
 
 var casper = require('casper').create({
-        waitTimeout: 120000,
+        waitTimeout: 20000,
         pageSettings: {
-            userAgent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2227.0 Safari/537.36'/*,
+            userAgent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2227.0 Safari/537.36',
             loadImages: false,
-            loadPlugins: false*/
+            loadPlugins: false
         }
     }),
     account,
@@ -51,7 +51,9 @@ actions = {
     create: function () {
         var form = 'form[action="/ajax_register"] ',
             formField = form +'input',
-            formButton = form +'button.login-button:not([disabled])';
+            formButton = form +'button.login-button',
+            formButtonDisabled = form +'button.login-button[disabled]',
+            formFirstNameHiddenLabel = formField +'[name="fname"] + label[style*="display"]';
 
         this.waitForSelector(formButton, function () {
             this.sendKeys(formField +'[name="fname"]', account.firstName);
@@ -59,32 +61,30 @@ actions = {
             this.sendKeys(formField +'[name="email"]', account.email);
             this.sendKeys(formField +'[name="password"]', account.password);
 
-            var termsAndConditionsIsChecked = this.evaluate(function (formField) {
-                return jQuery(formField +'[name="tos_agree"]:checked').length === 1;
-            }, formField);
+            // To check if Javascript is loaded, we ensure labels disappeared after the inputs were filled.
+            this.waitForSelector(formFirstNameHiddenLabel, function () {
 
-            if ( ! termsAndConditionsIsChecked) {
-                this.click(formField +'[name="tos_agree"]');
-            }
+                // As we evaluate code with jQuery, it's better to wait for JS to be loaded to handle this one.
+                var termsAndConditionsIsChecked = this.evaluate(function (formField) {
+                    return jQuery(formField + '[name="tos_agree"]:checked').length === 1;
+                }, formField);
 
-            this.click(formButton);
+                if (!termsAndConditionsIsChecked) {
+                    this.click(formField + '[name="tos_agree"]');
+                }
 
-            this.wait(5000, function () {
-                this.waitForUrl('https://www.dropbox.com/gs', function () {
-                    this.capture('screenshots/4_after_page_load.png');
-                    var selector = '//*[@id="header-account-menu"]/div/ul/div[1]/span',
-                        text = account.email;
+                this.click(formButton);
 
-                    this.waitUntilVisible(
-                        {
-                            type: 'xpath',
-                            path: selector + '[contains(., "' + text + '")]'
-                        },
-                        function () {
-                            this.log('Account created successfully !', 'info');
+                this.waitWhileSelector(formButtonDisabled, function () {
+                    this.waitForUrl('https://www.dropbox.com/gs', function () {
+                        var selector = '//*[@id="gs"]/h1',
+                            text = 'Get started';
+
+                        this.waitForSelector(selectorContains(selector, text), function () {
+                            this.log('The account was created successfully !', 'info');
                             safeExit(this, 0);
-                        }
-                    );
+                        });
+                    });
                 });
             });
         });
@@ -94,6 +94,7 @@ actions = {
             formField = form +'input',
             formButton = form +'button.login-button:not([disabled="True"])';
 
+        // As this button is disabled if Javascript isn't enabled, we ensure Javascript is loaded before starting.
         this.waitForSelector(formButton, function () {
             this.sendKeys(formField +'[name="login_email"]', account.email);
             this.sendKeys(formField +'[name="login_password"]', account.password);
@@ -102,41 +103,19 @@ actions = {
                 return jQuery(formField +'[name="remember_me"]:checked').length === 1;
             }, formField);
 
-            this.log('Remember me is checked : '+ this.evaluate(function (formField) {
-                return jQuery(formField +'[name="remember_me"]:checked').length === 1;
-            }, formField), 'debug');
-
             if (rememberMeIsChecked) {
                 this.click(formField +'[name="remember_me"]');
             }
 
-            this.log('Remember me is checked : '+ this.evaluate(function (formField) {
-                return jQuery(formField +'[name="remember_me"]:checked').length === 1;
-            }, formField), 'debug');
-
-            this.capture('screenshots/1_before_click.png');
             this.click(formButton);
-            this.capture('screenshots/2_after_click.png');
 
-            this.waitUntilVisible('.login-loading-indicator', function () {
-                this.capture('screenshots/3_loading_visible.png');
-                this.waitWhileVisible('.login-loading-indicator', function () {
-                    this.capture('screenshots/4_loading_hidden.png');
-                    var selector = '//*[@id="page-content"]/div/div[2]/p[1]',
-                        text = 'Your computer was successfully linked to your account';
+            this.waitWhileVisible('.login-loading-indicator', function () {
+                var selector = '//*[@id="page-content"]/div/div[2]/p[1]',
+                    text = 'Your computer was successfully linked to your account';
 
-                    this.capture('screenshots/5_before_confirm_visible.png');
-                    this.waitUntilVisible(
-                        {
-                            type: 'xpath',
-                            path: selector + '[contains(., "' + text + '")]'
-                        },
-                        function () {
-                            this.capture('screenshots/6_after_confirm_visible.png');
-                            this.log('Account was linked successfully !', 'info');
-                            safeExit(this, 0);
-                        }
-                    );
+                this.waitUntilVisible(selectorContains(selector, text), function () {
+                    this.log('The account was linked successfully !', 'info');
+                    safeExit(this, 0);
                 });
             });
         });
@@ -147,6 +126,14 @@ casper.start(dropboxUrl);
 casper.then(actions[action]);
 casper.run();
 
+function selectorContains(selector, text)
+{
+    return {
+        type: 'xpath',
+        path: selector + '[contains(., "' + text + '")]'
+    }
+}
+
 function safeExit(casper, code)
 {
     if (code > 0) {
@@ -154,6 +141,6 @@ function safeExit(casper, code)
     }
 
     setTimeout(function () {
-        casper.exit(code);
+        phantom.exit(code);
     }, 0);
 }
