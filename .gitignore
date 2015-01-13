@@ -1,5 +1,4 @@
 /.vagrant/
-/provisioning/resources/gnutix_ubuntu-trusty-dropbox-casperjs.box
 /screenshots/
 !/screenshots/.gitkeep
 /config/config.ini

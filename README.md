@@ -10,9 +10,8 @@ Install the latest versions of [Vagrant](https://www.vagrantup.com/downloads.htm
 ## Setup
 
 1. Clone the repository : `git clone git@bitbucket.org:gnutix/dropbox-batch-accounts.git && cd dropbox-batch-accounts`
-2. Download the Vagrant box : `vagrant box add gnutix/ubuntu-trusty-dropbox-casperjs --provider virtualbox`
-3. Copy the configuration sample file : `cp config/config.ini.dist config/config.ini`
-4. Adapt the following values of `config/config.ini` to your needs :
+2. Copy the configuration sample file : `cp config/config.ini.dist config/config.ini`
+3. Adapt the following values of `config/config.ini` to your needs :
 
 ```
 # The referral link of the Dropbox account you want to increase the storage of.
@@ -25,8 +24,13 @@ accountEmail = "change_me_for_something_unique.%d@yopmail.com"
 ## Run
 
 Execute `bash run.sh <OPTIONS>` in your terminal and watch the magic happen (PS: you will be prompted for your sudo password).
-`<OPTIONS>` can be a single integer (`1`) or two integers (`1 32`) for managing multiple accounts (1, 2, 3,..., 31, 32).
+`<OPTIONS>` can be either :
+
+* empty/not provided (default value of `1` is used)
+* a single integer (`23`)
+* two integers separated by a space (`23 42`), which results in a loop between 23 and 42 (23, 24, 25,... 40, 41, 42).
 
 ## Tips
 
-If you have no referral accounts linked to your account yet, you can use `1 32` to get the maximum space possible.
+If you have no referral accounts linked to your account yet, you can use `bash run.sh 1 32` to get the maximum space
+possible at once.
