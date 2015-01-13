@@ -7,19 +7,15 @@ This package is meant to create referral Dropbox accounts to link them to your o
 Clone the repository `git clone git@bitbucket.org:gnutix/dropbox-batch-accounts.git && cd dropbox-batch-accounts`.
 [Install vagrant](https://www.vagrantup.com/downloads.html) and add the box : `vagrant box add ubuntu/trusty64`.
 
-Then, copy the default configuration file `cp config/config.ini.dist config/config.ini` and adapt the values of `config/config.ini` to your needs.
+Then, copy the default configuration file `cp config/config.ini.dist config/config.ini` and adapt the following values
+of `config/config.ini` to your needs :
 
 ```
-[config]
-dropboxReferralLink = "https://db.tt/xxxxxxxx" # The referral link of the Dropbox account you want to increase the storage of.
-
-accountFirstName = "John" # The referral account's firstname
-accountLastName = "Doe" # The referral account's lastname
-accountEmail = "myfakedropboxaccount.%s@yopmail.com" # The referral account's email. "%s" will be replaced by the account ID from the loop.
-accountPassword = "123123" # The referral account's password
-
-action = "both" # Can be "create", "link" or "both". Will create the referral Dropbox account, link it with its Dropbox installation, or do both.
-logging = "none" # The log level for CasperJS/PhantomJS. Can be "none" (disabled) or : info, warning, error, debug.
+# The referral link of the Dropbox account you want to increase the storage of.
+dropboxReferralLink = "https://db.tt/xxxxxxxx"
+ 
+# The referral account's email. "%d" will be replaced by the account ID from the loop.
+accountEmail = "change_me_for_something_unique.%d@yopmail.com" 
 ```
 
 ## Run

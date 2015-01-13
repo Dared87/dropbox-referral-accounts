@@ -38,5 +38,5 @@ do
     done
 done
 
-#echo "Destroy the last running box..."
-#vagrant destroy -f
+echo "Destroy the last running box..."
+vagrant destroy -f

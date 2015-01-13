@@ -5,7 +5,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.box = "ubuntu/trusty64"
 
     config.vm.synced_folder ".", "/vagrant", :nfs => true
-    config.vm.network :private_network, type: "dhcp"
+    config.vm.network :private_network, ip: '10.10.10.60'
 
     config.vm.provider "virtualbox" do |virtualbox|
         virtualbox.customize ["modifyvm", :id, "--macaddress1", ENV['MAC_ADDRESS'] ]

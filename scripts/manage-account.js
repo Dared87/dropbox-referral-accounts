@@ -31,7 +31,7 @@ account = {
     firstName: String(casper.cli.get(3)),
     lastName: String(casper.cli.get(4)),
     password: String(casper.cli.get(6)),
-    email: String(casper.cli.get(5).replace(/%s/, casper.cli.get(2)))
+    email: String(casper.cli.get(5).replace(/%d/, casper.cli.get(2)))
 };
 
 casper.options.onWaitTimeout = function () {

@@ -1,10 +1,10 @@
 [config]
 dropboxReferralURL = "https://db.tt/xxxxxxxx"
+accountEmail = "change_me_for_something_unique.%d@yopmail.com"
 
+# Do not touch the configuration below except if you know what you're doing
 accountFirstName = "John"
 accountLastName = "Doe"
-accountEmail = "myfakedropboxaccount.%s@yopmail.com"
 accountPassword = "123123"
-
 action = "both"
 logging = "none"
