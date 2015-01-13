@@ -19,8 +19,6 @@ fi
 
 echo "Setup Vagrant box for account ${ACCOUNT_ID} !"
 
-bash /vagrant/provisioning/browser-manipulation.sh
-
 # Fix screenshots path for CasperJS
 cd /vagrant
 RUN="casperjs ${RUN_OPTIONS} /vagrant/scripts"
@@ -34,7 +32,8 @@ fi
 
 # Link the account
 if [ "${ACTION}" == "link" ] || [ "${ACTION}" == "both" ] ; then
-    bash /vagrant/provisioning/dropbox.sh
+    echo "Start a new Dropbox daemon"
+    ${HOME}/.dropbox-dist/dropboxd > ${HOME}/dropbox.log 2>&1 &
 
     WAIT=5
     while [ 1 ]
