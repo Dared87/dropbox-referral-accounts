@@ -31,12 +31,33 @@ dropboxReferralLink = "https://db.tt/xxxxxxxx"
 accountEmail = "change_me_for_something_unique.%d@yopmail.com" 
 ```
 
-## Give me space !
+# Give me space !
 
 Execute `bash run.sh 1 32` in your terminal and watch the magic happen
 (PS: you will be prompted for your sudo password by Vagrant, so don't run the command and leave, or the magic will die).
 
 Please note that running the script the first time will take you a while, as it has to download a Vagrant box of ~500 Mb.
+
+# Troubleshooting
+
+## DHCP conflict
+
+If you see the following message :
+
+> A host only network interface you're attempting to configure via DHCP already has a conflicting host only adapter with
+> DHCP enabled. The DHCP on this adapter is incompatible with the DHCP settings. Two host only network interfaces are not
+> allowed to overlap, and each host only network interface can have only one DHCP server. Please reconfigure your host
+> only network or remove the virtual machine using the other host only network.
+
+Change the following line of the file `Vagrantfile` :
+
+```
+    config.vm.network :private_network, type: "dhcp"
+```
+to
+```
+    config.vm.network :private_network, ip: "10.10.10.10"`
+```
 
 # Technical information
 
@@ -53,3 +74,7 @@ The script can be used in two ways :
 * handling one account (`bash run.sh X`)
 
 Take a closer look at the configuration file for more options.
+
+# Disclaimer
+
+The author of this script disclaims all responsibility for the effects of its usage by whomever other than himself.
