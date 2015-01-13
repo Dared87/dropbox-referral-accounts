@@ -22,3 +22,5 @@ accountEmail = "change_me_for_something_unique.%d@yopmail.com"
 
 Execute `bash run.sh <OPTIONS>` in your terminal and watch the magic happen (PS: you will be prompted for your sudo password).
 `<OPTIONS>` can be a single integer (`1`) or two integers (`1 32`) for managing multiple accounts (1, 2, 3,..., 31, 32).
+
+If you have no referral accounts linked to your account yet, you can use `1 32` to get the maximum space possible.
