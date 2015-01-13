@@ -59,6 +59,13 @@ to
     config.vm.network :private_network, ip: "10.10.10.10"`
 ```
 
+### Accounts not correctly created or linked
+
+You can take a look at the `screenshots/` folder, which contains screenshots done just before errors occurs.
+You can also display more information when running the script, by using `logging = "debug"` in the configuration file.
+
+Please, keep in mind that browser scraping is "fragile", and unfortunately doesn't work 100 % of the time.
+
 ## Technical information
 
 ### The nasty details
