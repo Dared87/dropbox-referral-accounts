@@ -31,16 +31,16 @@ dropboxReferralLink = "https://db.tt/xxxxxxxx"
 accountEmail = "change_me_for_something_unique.%d@yopmail.com" 
 ```
 
-# Give me space !
+## Give me space !
 
 Execute `bash run.sh 1 32` in your terminal and watch the magic happen
 (PS: you will be prompted for your sudo password by Vagrant, so don't run the command and leave, or the magic will die).
 
 Please note that running the script the first time will take you a while, as it has to download a Vagrant box of ~500 Mb.
 
-# Troubleshooting
+## Troubleshooting
 
-## DHCP conflict
+### DHCP conflict
 
 If you see the following message :
 
@@ -59,15 +59,15 @@ to
     config.vm.network :private_network, ip: "10.10.10.10"`
 ```
 
-# Technical information
+## Technical information
 
-## The nasty details
+### The nasty details
 
 The scripts create temporary Vagrant boxes with varying MAC addresses and run Dropbox's software on it ;
 then crawl Dropbox's website using CasperJS : first to create a random referral account via a configured
 referral link, secondly to link the referral account with the software installation.
 
-## Advanced usage
+### Advanced usage
 
 The script can be used in two ways :
 * handling multiple accounts (`bash run.sh X Y`)
@@ -75,6 +75,6 @@ The script can be used in two ways :
 
 Take a closer look at the configuration file for more options.
 
-# Disclaimer
+## Disclaimer
 
 The author of this script disclaims all responsibility for the effects of its usage by whomever other than himself.
