@@ -56,7 +56,7 @@ Change the following line of the file `Vagrantfile` :
 ```
 to
 ```
-    config.vm.network :private_network, ip: "10.10.10.10"`
+    config.vm.network :private_network, ip: "10.10.10.10"
 ```
 (you are free to use any IP address in the
 [private IP address space](http://en.wikipedia.org/wiki/Private_network#Private_IPv4_address_spaces) instead of
@@ -73,13 +73,18 @@ Please, keep in mind that browser scraping is "fragile", and unfortunately doesn
 
 ### The nasty details
 
-The scripts create temporary Vagrant boxes with varying MAC addresses and run Dropbox's software on it ;
-then crawl Dropbox's website using CasperJS : first to create a random referral account via a configured
-referral link, secondly to link the referral account with the software installation.
+The scripts :
+
+* creates temporary Vagrant boxes with varying MAC addresses
+* installs and run Dropbox's software on them
+* crawls Dropbox's website using CasperJS :
+    1. to create a random referral account, using the configured referral link
+    2. to link the referral account with the software installation of the box
 
 ### Advanced usage
 
 The script can be used in two ways :
+
 * handling multiple accounts (`bash run.sh X Y`)
 * handling one account (`bash run.sh X`)
 
