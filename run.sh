@@ -4,9 +4,9 @@
 # See https://www.virtualbox.org/ticket/10778 for more information.
 #
 function generate_mac_address_for_virtualbox() {
-    local FIRST_CHAR=$(cat /dev/urandom | tr -dc 0-9A-Fa-f | head -c1)
-    local SECOND_CHAR=$(cat /dev/urandom | tr -dc 02468ACEace | head -c1)
-    local FOLLOWING_CHARS=$(cat /dev/urandom | tr -dc 0-9A-Fa-f | head -c10)
+    local FIRST_CHAR=$(LC_CTYPE=C tr -dc 0-9A-Fa-f < /dev/urandom | head -c1)
+    local SECOND_CHAR=$(LC_CTYPE=C tr -dc 02468ACEace < /dev/urandom | head -c1)
+    local FOLLOWING_CHARS=$(LC_CTYPE=C tr -dc 0-9A-Fa-f < /dev/urandom | head -c10)
 
     echo "${FIRST_CHAR}${SECOND_CHAR}${FOLLOWING_CHARS}" | tr a-z A-Z
 }
