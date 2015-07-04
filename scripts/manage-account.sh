@@ -5,6 +5,12 @@ RUN_OPTIONS="--ssl-protocol=any --ignore-ssl-errors=true --web-security=false"
 echo "Read configuration file"
 source /vagrant/config/config.cfg
 
+# Add Anonymity
+if [ "${anonymity}" = true ] ; then
+    bash /vagrant/scripts/anonymity.sh
+    RUN_OPTIONS="${RUN_OPTIONS} --proxy=127.0.0.1:9050 --proxy-type=socks5"
+fi
+
 # Add logging flags
 if [ "none" != "${logging}" ] ; then
     RUN_OPTIONS="${RUN_OPTIONS} --verbose --log-level=${logging}"
@@ -14,7 +20,12 @@ fi
 cd /vagrant
 
 # CasperJS command
+echo "Run casperJS with options : ${RUN_OPTIONS}"
 RUN="casperjs ${RUN_OPTIONS} /vagrant/scripts/dropbox.js"
+
+if [ "${anonymity}" = true ] ; then
+    curl -sS --socks5 127.0.0.1:9050 https://api.ipify.org?format=json
+fi
 
 # Create the account
 if [ "${action}" == "create" ] || [ "${action}" == "both" ] ; then

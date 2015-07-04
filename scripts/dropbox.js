@@ -76,9 +76,9 @@ actions = {
                 this.click(formButton);
 
                 this.waitWhileSelector(formButtonDisabled, function () {
-                    this.waitForUrl('https://www.dropbox.com/gs', function () {
-                        var selector = '//*[@id="gs"]/h1',
-                            text = 'Get started';
+                    this.waitForUrl('https://www.dropbox.com/install?os=lnx', function () {
+                        var selector = '//*[@id="linux-install-content"]/h2',
+                            text = 'Dropbox Headless Install via command line';
 
                         this.waitForSelector(selectorContains(selector, text), function () {
                             this.log('The account was created successfully !', 'info');
