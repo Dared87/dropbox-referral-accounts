@@ -15,8 +15,10 @@ function create_box() {
     local ACCOUNT_ID=$1
     local MAC_ADDRESS=$(generate_mac_address_for_virtualbox)
 
+    source config/config.cfg
+
     echo "Create a temporary Vagrant box #${ACCOUNT_ID} with the MAC address ${MAC_ADDRESS}..."
-    ACCOUNT_ID=${ACCOUNT_ID} MAC_ADDRESS=${MAC_ADDRESS} vagrant up --provision
+    ACCOUNT_ID=${ACCOUNT_ID} MAC_ADDRESS=${MAC_ADDRESS} vagrant up --provision --provider=${provider}
 
     return $?
 }
