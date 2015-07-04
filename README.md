@@ -76,10 +76,11 @@ Please, keep in mind that browser scraping is "fragile", and unfortunately doesn
 The scripts :
 
 * creates temporary Vagrant boxes with varying MAC addresses
+* installs and run a TOR proxy for varying IP addresses
 * installs and run Dropbox's software on them
 * crawls Dropbox's website using CasperJS :
-    1. to create a random referral account, using the configured referral link
-    2. to link the referral account with the software installation of the box
+    1. to create a random referral account, from the configured referral link
+    2. to link the referral account with the Dropbox software installed in the box
 
 ### Advanced usage
 
