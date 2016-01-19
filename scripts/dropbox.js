@@ -1,7 +1,6 @@
 "use strict";
 
 var casper = require('casper').create({
-        waitTimeout: 20000,
         pageSettings: {
             userAgent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2227.0 Safari/537.36',
             loadImages: false,
@@ -11,15 +10,17 @@ var casper = require('casper').create({
     account,
     action,
     actions,
-    dropboxUrl;
+    dropboxUrl,
+    timeout;
 
-if ( ! casper.cli.has(6) || casper.cli.has(7)) {
-    console.log('Usage: manage-account.js <action> <dropboxUrl> <account_id> <accountFirstName> <accountLastName> <accountEmail> <accountPassword>');
+if ( ! casper.cli.has(7) || casper.cli.has(8)) {
+    console.log('Usage: manage-account.js <action> <dropboxUrl> <accountId> <accountFirstName> <accountLastName> <accountEmail> <accountPassword> <timeout>');
     casper.exit(1);
 }
 
 action = casper.cli.get(0);
 dropboxUrl = casper.cli.get(1);
+timeout = parseInt(casper.cli.get(7)) * 1000;
 
 if (action !== 'link' && action !== 'create') {
     console.log('The action must be either "link" or "create".');
@@ -34,6 +35,9 @@ account = {
     email: String(casper.cli.get(5).replace(/%d/, casper.cli.get(2)))
 };
 
+// Handling timeout
+casper.options.waitTimeout = timeout;
+console.log('Set CasperJS timeout to : ' + casper.options.waitTimeout + ' milliseconds.');
 casper.options.onWaitTimeout = function () {
     this.waitUntilVisible(
         '.error-message',
@@ -92,7 +96,8 @@ actions = {
     link: function () {
         var form = 'form[action="/cli_link_nonce"] ',
             formField = form +'input',
-            formButton = form +'button.login-button:not([disabled="True"])';
+            formButton = form +'button.login-button',
+            formButtonEnabled = formButton +':not([disabled="True"])';
 
         // As this button is disabled if Javascript isn't enabled, we ensure Javascript is loaded before starting.
         this.waitForSelector(formButton, function () {
@@ -107,15 +112,17 @@ actions = {
                 this.click(formField +'[name="remember_me"]');
             }
 
-            this.click(formButton);
+            this.waitForSelector(formButtonEnabled, function () {
+                this.click(formButtonEnabled);
 
-            this.waitWhileVisible('.login-loading-indicator', function () {
-                var selector = '//*[@id="page-content"]/div/div[2]/p[1]',
-                    text = 'Your computer was successfully linked to your account';
+                this.waitWhileVisible('.login-loading-indicator', function () {
+                    var selector = '//*[@id="page-content"]/div/div[2]/p[1]',
+                        text = 'Your computer was successfully linked to your account';
 
-                this.waitUntilVisible(selectorContains(selector, text), function () {
-                    this.log('The account was linked successfully !', 'info');
-                    safeExit(this, 0);
+                    this.waitUntilVisible(selectorContains(selector, text), function () {
+                        this.log('The account was linked successfully !', 'info');
+                        safeExit(this, 0);
+                    });
                 });
             });
         });

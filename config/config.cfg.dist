@@ -9,3 +9,4 @@ action="both"
 logging="none"
 anonymity="true"
 provider="virtualbox"
+timeout=60

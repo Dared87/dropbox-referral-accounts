@@ -67,7 +67,11 @@ to
 You can take a look at the `screenshots/` folder, which contains screenshots done just before errors occurs.
 You can also display more information when running the script, by using `logging = "debug"` in the configuration file.
 
-Please, keep in mind that browser scraping is "fragile", and unfortunately doesn't work 100 % of the time.
+One issue that happens a lot is that the JavaScript on Dropbox website isn't loaded fast enough, as it highly depends on
+your network connection, especially through TOR's proxy. Increasing CasperJS's timeout by changing the `timeout`
+configuration key can help.
+
+Anyway, keep in mind that browser scraping is "fragile", and unfortunately doesn't work 100% of the time.
 
 ## Technical information
 
