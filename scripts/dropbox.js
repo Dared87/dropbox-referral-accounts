@@ -14,7 +14,7 @@ var casper = require('casper').create({
     timeout;
 
 if ( ! casper.cli.has(7) || casper.cli.has(8)) {
-    console.log('Usage: manage-account.js <action> <dropboxUrl> <accountId> <accountFirstName> <accountLastName> <accountEmail> <accountPassword> <timeout>');
+    casper.log('Usage: manage-account.js <action> <dropboxUrl> <accountId> <accountFirstName> <accountLastName> <accountEmail> <accountPassword> <timeout>');
     casper.exit(1);
 }
 
@@ -23,7 +23,7 @@ dropboxUrl = casper.cli.get(1);
 timeout = parseInt(casper.cli.get(7)) * 1000;
 
 if (action !== 'link' && action !== 'create') {
-    console.log('The action must be either "link" or "create".');
+    casper.log('The action must be either "link" or "create".');
     casper.exit(1);
 }
 
@@ -38,25 +38,12 @@ account = {
 // Handling timeout
 casper.options.waitTimeout = timeout;
 console.log('Set CasperJS timeout to : ' + casper.options.waitTimeout + ' milliseconds.');
-casper.options.onWaitTimeout = function () {
-    this.waitUntilVisible(
-        '.error-message',
-        function () {
-            this.log(this.evaluate(function () { return jQuery('.error-message').text(); }), 'error');
-            safeExit(this, 1);
-        },
-        function () {
-            safeExit(this, 1);
-        }
-    );
-};
 
 actions = {
     create: function () {
         var form = 'form[action="/ajax_register"] ',
             formField = form +'input',
             formButton = form +'button.login-button',
-            formButtonDisabled = form +'button.login-button[disabled]',
             formFirstNameHiddenLabel = formField +'[name="fname"] + label[style*="display"]';
 
         this.waitForSelector(formButton, function () {
@@ -79,19 +66,17 @@ actions = {
 
                 this.click(formButton);
 
-                this.waitWhileSelector(formButtonDisabled, function () {
-                    this.waitForUrl('https://www.dropbox.com/install?os=lnx', function () {
-                        var selector = '//*[@id="linux-install-content"]/h2',
-                            text = 'Dropbox Headless Install via command line';
+                this.waitForUrl('https://www.dropbox.com/install?os=lnx', function () {
+                    var selector = '//*[@id="linux-install-content"]/h2',
+                        text = 'Dropbox Headless Install via command line';
 
-                        this.waitForSelector(selectorContains(selector, text), function () {
-                            this.log('The account was created successfully !', 'info');
-                            safeExit(this, 0);
-                        });
-                    });
-                });
-            });
-        });
+                    this.waitForSelector(selectorContains(selector, text), function () {
+                        safeExit(this, 0, 'The account was created successfully !');
+
+                    }, function () { safeExit(this, 1, 'Timeout when looking for the flash message asserting the account creation.'); });
+                }, function () { safeExit(this, 1, 'Timeout when waiting for the Dropbox installation page to load.'); });
+            }, function () { safeExit(this, 1, 'Timeout when checking that the form\'s label disappeared (meaning the JS has been loaded).'); });
+        }, function () { safeExit(this, 1, 'Timeout when looking for the creation form\'s button.'); });
     },
     link: function () {
         var form = 'form[action="/cli_link_nonce"] ',
@@ -120,12 +105,12 @@ actions = {
                         text = 'Your computer was successfully linked to your account';
 
                     this.waitUntilVisible(selectorContains(selector, text), function () {
-                        this.log('The account was linked successfully !', 'info');
-                        safeExit(this, 0);
-                    });
-                });
-            });
-        });
+                        safeExit(this, 0, 'The account was linked successfully !');
+
+                    }, function () { safeExit(this, 1, 'Timeout when looking for the message asserting the account linking.'); });
+                }, function () { safeExit(this, 1, 'Timeout when checking that the loading indicator disappeared.'); });
+            }, function () { safeExit(this, 1, 'Timeout when checking that the form\'s button was enabled (meaning the JS has been loaded).'); });
+        }, function () { safeExit(this, 1, 'Timeout when looking for the linking form\'s button.'); });
     }
 };
 
@@ -141,10 +126,13 @@ function selectorContains(selector, text)
     }
 }
 
-function safeExit(casper, code)
+function safeExit(casper, code, message)
 {
     if (code > 0) {
         casper.capture('screenshots/error_exit_code_' + code + '_timestamp_' + new Date().getTime() + '.png');
+    }
+    if (message !== undefined) {
+        casper.log(message, (code > 0 ? 'error' : 'info'));
     }
 
     setTimeout(function () {
