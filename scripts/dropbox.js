@@ -46,13 +46,14 @@ actions = {
             formButton = form +'button.login-button',
             formFirstNameHiddenLabel = formField +'[name="fname"] + label[style*="display"]';
 
+        this.wait(250);
         this.waitForSelector(formButton, function () {
             this.sendKeys(formField +'[name="fname"]', account.firstName);
             this.sendKeys(formField +'[name="lname"]', account.lastName);
             this.sendKeys(formField +'[name="email"]', account.email);
             this.sendKeys(formField +'[name="password"]', account.password);
 
-            // To check if Javascript is loaded, we ensure labels disappeared after the inputs were filled.
+            this.wait(250);
             this.waitForSelector(formFirstNameHiddenLabel, function () {
 
                 // As we evaluate code with jQuery, it's better to wait for JS to be loaded to handle this one.
@@ -66,10 +67,12 @@ actions = {
 
                 this.click(formButton);
 
+                this.wait(250);
                 this.waitForUrl('https://www.dropbox.com/install?os=lnx', function () {
                     var selector = '//*[@id="linux-install-content"]/h2',
                         text = 'Dropbox Headless Install via command line';
 
+                    this.wait(250);
                     this.waitForSelector(selectorContains(selector, text), function () {
                         safeExit(this, 0, 'The account was created successfully !');
 
@@ -84,7 +87,7 @@ actions = {
             formButton = form +'button.login-button',
             formButtonEnabled = formButton +':not([disabled="True"])';
 
-        // As this button is disabled if Javascript isn't enabled, we ensure Javascript is loaded before starting.
+        this.wait(250);
         this.waitForSelector(formButton, function () {
             this.sendKeys(formField +'[name="login_email"]', account.email);
             this.sendKeys(formField +'[name="login_password"]', account.password);
@@ -97,6 +100,7 @@ actions = {
                 this.click(formField +'[name="remember_me"]');
             }
 
+            this.wait(250);
             this.waitForSelector(formButtonEnabled, function () {
                 this.click(formButtonEnabled);
 
@@ -104,6 +108,7 @@ actions = {
                     var selector = '//*[@id="page-content"]/div/div[2]/p[1]',
                         text = 'Your computer was successfully linked to your account';
 
+                    this.wait(250);
                     this.waitUntilVisible(selectorContains(selector, text), function () {
                         safeExit(this, 0, 'The account was linked successfully !');
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 ACCOUNT_ID=$1
-RUN_OPTIONS="--ssl-protocol=any --ignore-ssl-errors=true --web-security=false"
+RUN_OPTIONS="--ssl-protocol=any --ignore-ssl-errors=true --web-security=false --cookies-file=/tmp/cookies.txt"
 
 echo "Read configuration file"
 source /vagrant/config/config.cfg
