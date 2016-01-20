@@ -28,7 +28,7 @@ Install up-to-date versions of [Vagrant](https://www.vagrantup.com/downloads.htm
 dropboxReferralLink = "https://db.tt/xxxxxxxx"
  
 # The referral accounts' email. "%d" will be replaced by the account ID from the loop.
-accountEmail = "change_me_for_something_unique.%d@yopmail.com" 
+accountEmail = "my.gmail.nickname+change_me_for_something_unique.%d@gmail.com" 
 ```
 
 ## Give me space !
