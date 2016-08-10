@@ -1,5 +1,8 @@
 #!/bin/bash
 ACCOUNT_ID=$1
+EMAIL=$2
+FIRST=$3
+LAST=$4
 RUN_OPTIONS="--ssl-protocol=any --ignore-ssl-errors=true --web-security=false --cookies-file=/tmp/cookies.txt"
 
 echo "Read configuration file"
@@ -39,8 +42,8 @@ RUN="casperjs ${RUN_OPTIONS} /vagrant/scripts/dropbox.js"
 # Create the account
 if [ "${action}" == "create" ] || [ "${action}" == "both" ] ; then
     echo "Create the referral account #${ACCOUNT_ID} using : ${dropbox_referral_url} !"
-    ${RUN} create ${dropbox_referral_url} ${ACCOUNT_ID} ${account_firstname} ${account_lastname} \
-        ${account_email} ${account_password} "${timeout}" || true
+    ${RUN} create ${dropbox_referral_url} ${ACCOUNT_ID} ${FIRST} ${LAST} \
+        ${EMAIL} ${account_password} "${timeout}" || true
 fi
 
 # Link the account
@@ -60,8 +63,8 @@ if [ "${action}" == "link" ] || [ "${action}" == "both" ] ; then
             DROPBOX_LINK_URL=$(echo "${DROPBOX_LINK_URL}" | tail -n1)
 
             echo "Link the referral account #${ACCOUNT_ID} using : ${DROPBOX_LINK_URL} !"
-            ${RUN} link ${DROPBOX_LINK_URL} ${ACCOUNT_ID} ${account_firstname} ${account_lastname} \
-                ${account_email} ${account_password} "${timeout}" || true
+            ${RUN} link ${DROPBOX_LINK_URL} ${ACCOUNT_ID} ${FIRST} ${LAST} \
+                ${EMAIL} ${account_password} "${timeout}" || true
 
             break
         fi
