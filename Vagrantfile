@@ -11,5 +11,5 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         virtualbox.customize ["modifyvm", :id, "--macaddress1", ENV['MAC_ADDRESS'] ]
     end
 
-    config.vm.provision :shell, path: "scripts/manage-account.sh", privileged: false, args: ENV['ACCOUNT_ID'] ENV['EMAIL'] ENV['FIRST'] ENV['LAST']
+    config.vm.provision :shell, path: "scripts/manage-account.sh", privileged: false, args: "ENV['ACCOUNT_ID'] ENV['EMAIL'] ENV['FIRST'] ENV['LAST']"
 end
