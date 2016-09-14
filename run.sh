@@ -21,7 +21,7 @@ function create_box() {
 
     source config/config.cfg
 	
-	local RESP=$(curl -s "http://api.randomuser.me/?inc=email,first,last&nat=${location}&format=csv&noinfo" | sed -n '2p')
+	local RESP=$(curl -s "http://api.randomuser.me/?inc=email,name&nat=${location}&format=csv&noinfo" | sed -n '2p')
 	local FIRST=$(echo $RESP | cut -d',' -f 2)
 	local LAST=$(echo $RESP | cut -d',' -f 3)
 	local EMAIL=$(echo $RESP | cut -d',' -f 4)

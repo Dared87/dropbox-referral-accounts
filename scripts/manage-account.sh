@@ -41,9 +41,8 @@ RUN="casperjs ${RUN_OPTIONS} /vagrant/scripts/dropbox.js"
 
 # Create the account
 if [ "${action}" == "create" ] || [ "${action}" == "both" ] ; then
-    echo "Create the referral account #${ACCOUNT_ID} using : ${dropbox_referral_url} !"
-    ${RUN} create ${dropbox_referral_url} ${ACCOUNT_ID} ${FIRST} ${LAST} \
-        ${EMAIL} ${account_password} "${timeout}" || true
+    echo "Create the referral account #${ACCOUNT_ID} (${EMAIL}) using : ${dropbox_referral_url} !"
+    ${RUN} create ${dropbox_referral_url} ${ACCOUNT_ID} ${FIRST} ${LAST} ${EMAIL} ${account_password} "${timeout}" || true
 fi
 
 # Link the account
@@ -62,9 +61,8 @@ if [ "${action}" == "link" ] || [ "${action}" == "both" ] ; then
             # Get only the last line
             DROPBOX_LINK_URL=$(echo "${DROPBOX_LINK_URL}" | tail -n1)
 
-            echo "Link the referral account #${ACCOUNT_ID} using : ${DROPBOX_LINK_URL} !"
-            ${RUN} link ${DROPBOX_LINK_URL} ${ACCOUNT_ID} ${FIRST} ${LAST} \
-                ${EMAIL} ${account_password} "${timeout}" || true
+            echo "Link the referral account #${ACCOUNT_ID} (${EMAIL}) using : ${DROPBOX_LINK_URL} !"
+            ${RUN} link ${DROPBOX_LINK_URL} ${ACCOUNT_ID} ${FIRST} ${LAST} ${EMAIL} ${account_password} "${timeout}" || true
 
             break
         fi
